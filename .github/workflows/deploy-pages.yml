@@ -30,12 +30,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # enablement: true מפעיל את Pages דרך ה-API בריצה הראשונה,
-      # כדי שלא תידרש הגדרה ידנית ב-Settings.
+      # דורש הפעלה חד-פעמית: Settings → Pages → Source: GitHub Actions.
+      # enablement: true נוסה ונדחה — לטוקן של Actions אין הרשאה ליצור
+      # אתר Pages ("Resource not accessible by integration").
       - uses: actions/configure-pages@v5
         id: pages
-        with:
-          enablement: true
 
       - uses: actions/setup-node@v4
         with:
