@@ -1,0 +1,26 @@
+{
+  "name": "bmf-site-base",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:next": "next dev",
+    "studio:server": "node scripts/studio-server.mjs",
+    "build": "next build && node scripts/bake.mjs",
+    "build:raw": "next build",
+    "bake": "node scripts/bake.mjs",
+    "start": "npx serve out"
+  },
+  "dependencies": {
+    "next": "15.1.6",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.7",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
+    "linkedom": "^0.18.13",
+    "typescript": "5.7.3"
+  }
+}
