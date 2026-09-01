@@ -1,4 +1,5 @@
 import { legalLinks, nav, site } from '@/content/site';
+import { asset } from '@/lib/asset';
 
 export default function Footer() {
   return (
@@ -34,7 +35,7 @@ export default function Footer() {
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} {site.name}. כל הזכויות שמורות.</p>
           <ul className="footer-legal">
-            {legalLinks.map((l) => <li key={l.href}><a href={l.href}>{l.label}</a></li>)}
+            {legalLinks.map((l) => <li key={l.href}><a href={asset(l.href)}>{l.label}</a></li>)}
           </ul>
         </div>
       </div>

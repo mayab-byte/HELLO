@@ -1,11 +1,12 @@
 import { about } from '@/content/site';
+import { asset } from '@/lib/asset';
 
 export default function About() {
   return (
     <section id="about" className="section" aria-labelledby="about-title">
       <div className="container about-inner">
         <div className="about-media">
-          <img src={about.image.src} alt={about.image.alt} width={900} height={600} loading="lazy" />
+          <img src={asset(about.image.src)} alt={about.image.alt} width={900} height={600} loading="lazy" />
         </div>
         <div className="about-text">
           <span className="section-eyebrow">{about.eyebrow}</span>

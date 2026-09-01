@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { nav, site } from '@/content/site';
+import { asset } from '@/lib/asset';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <a className="site-logo" href="/">
+        <a className="site-logo" href={asset('/')}>
           <span className="site-logo-mark" aria-hidden="true">{site.logoMark}</span>
           <span className="site-logo-text">{site.name}</span>
         </a>

@@ -1,4 +1,5 @@
 import { testimonials } from '@/content/site';
+import { asset } from '@/lib/asset';
 
 export default function Testimonials() {
   return (
@@ -19,7 +20,7 @@ export default function Testimonials() {
               </p>
               <blockquote className="testimonial-quote"><p>{t.quote}</p></blockquote>
               <div className="testimonial-person">
-                <img className="testimonial-avatar" src={t.avatar} alt="" width={44} height={44} loading="lazy" />
+                <img className="testimonial-avatar" src={asset(t.avatar)} alt="" width={44} height={44} loading="lazy" />
                 <span>
                   <span className="testimonial-name">{t.name}</span><br />
                   <span className="testimonial-role">{t.role}</span>

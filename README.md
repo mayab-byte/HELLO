@@ -33,6 +33,26 @@ npm run dev      # http://localhost:3000
 
 אחר כך `?edit` לסגירת הפינישים, ו-`npm run build`.
 
+## העלאה לאוויר
+
+### GitHub Pages — הכי מהיר, בלי חשבון נוסף
+ה-workflow כבר במאגר. הפעלה חד-פעמית:
+**Settings → Pages → Source: `GitHub Actions`**
+
+מאותו רגע כל `push` בונה ומפרסם אוטומטית.
+הכתובת: `https://<שם-המשתמש>.github.io/<שם-המאגר>/`
+
+### Vercel — מומלץ לאתר של לקוח אמיתי
+`vercel.com` → Import Git Repository → בחירת המאגר → Deploy.
+Next.js מזוהה אוטומטית, אין מה להגדיר. דומיין מותאם בלחיצה.
+
+### כל אחסון סטטי
+`npm run build` מייצר את `out/` — HTML/CSS/JS בלבד.
+מעלים את התיקייה לכל שרת (Netlify, Cloudflare Pages, cPanel, S3).
+
+> **תת-נתיב:** אם האתר לא יושב בשורש הדומיין, יש להעביר `BASE_PATH=/הנתיב`
+> בזמן הבנייה. ב-GitHub Pages זה קורה אוטומטית. בשורש — לא צריך כלום.
+
 ## מבנה
 
 ```

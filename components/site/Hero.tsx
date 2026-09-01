@@ -1,4 +1,5 @@
 import { hero } from '@/content/site';
+import { asset } from '@/lib/asset';
 
 export default function Hero() {
   return (
@@ -14,7 +15,7 @@ export default function Hero() {
           </div>
         </div>
         <div className="hero-media">
-          <img src={hero.image.src} alt={hero.image.alt} width={800} height={600} />
+          <img src={asset(hero.image.src)} alt={hero.image.alt} width={800} height={600} />
         </div>
       </div>
     </section>

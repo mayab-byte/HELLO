@@ -1,4 +1,5 @@
 import { gallery } from '@/content/site';
+import { asset } from '@/lib/asset';
 
 export default function Gallery() {
   return (
@@ -12,7 +13,7 @@ export default function Gallery() {
         <ul className="gallery-grid">
           {gallery.items.map((item) => (
             <li key={item.src} className="gallery-item">
-              <img src={item.src} alt={item.alt} width={600} height={600} loading="lazy" />
+              <img src={asset(item.src)} alt={item.alt} width={600} height={600} loading="lazy" />
               <span className="gallery-caption">{item.caption}</span>
             </li>
           ))}

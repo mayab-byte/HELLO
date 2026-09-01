@@ -1,4 +1,5 @@
 import { posts } from '@/content/site';
+import { asset } from '@/lib/asset';
 
 export default function Posts() {
   return (
@@ -12,7 +13,7 @@ export default function Posts() {
         <ul className="card-grid card-grid-3">
           {posts.items.map((post) => (
             <li key={post.title} className="post-card">
-              <img src={post.image.src} alt={post.image.alt} width={800} height={500} loading="lazy" />
+              <img src={asset(post.image.src)} alt={post.image.alt} width={800} height={500} loading="lazy" />
               <div className="post-body">
                 <p className="post-meta">
                   <span className="post-category">{post.category}</span>

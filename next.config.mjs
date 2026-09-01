@@ -8,6 +8,10 @@ import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js';
 export default function config(phase) {
   const isDev = phase === PHASE_DEVELOPMENT_SERVER;
   const studioDir = path.join(import.meta.dirname, 'studio');
+
+  // תת-נתיב לאירוח שאינו בשורש הדומיין (GitHub Pages תחת /REPO/, למשל).
+  // ריק כברירת מחדל — פריסה רגילה של לקוח יושבת בשורש.
+  const basePath = (process.env.BASE_PATH || '').replace(/\/$/, '');
   const stub = path.join(studioDir, 'boot.prod.ts');
 
   /** @type {import('next').NextConfig} */
@@ -16,9 +20,13 @@ export default function config(phase) {
     ...(isDev ? {} : { output: 'export' }),
     images: { unoptimized: true },
     trailingSlash: true,
+    ...(basePath ? { basePath, assetPrefix: basePath } : {}),
 
     // דגל זמן־ריצה. שכבת הגנה שנייה בלבד — ההסרה בפועל היא בהחלפת המודול שלמטה.
-    env: { NEXT_PUBLIC_STUDIO: isDev ? '1' : '0' },
+    env: {
+      NEXT_PUBLIC_STUDIO: isDev ? '1' : '0',
+      NEXT_PUBLIC_BASE_PATH: basePath,
+    },
 
     ...(isDev
       ? {
