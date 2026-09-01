@@ -43,6 +43,11 @@ jobs:
 
       - run: npm ci
 
+      # הפלטה שב-dna.ts נבדקת מול AA לפני הכל — צבע שלא עומד בניגודיות
+      # מפיל את הבנייה במקום להגיע לאוויר.
+      - name: Validate the DNA palette against AA
+        run: npm run check:dna
+
       # next build + אפיית הפתקים של Design Studio, אל תוך out/
       - name: Build static site
         run: npm run build

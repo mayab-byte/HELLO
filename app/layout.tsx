@@ -1,12 +1,26 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import StudioLoader from '@/studio/StudioLoader';
-import { site } from '@/content/site';
+import { dna } from '@/dna';
+import { dnaCss, dnaFontsHref } from '@/lib/dna';
+import { asset } from '@/lib/asset';
 
+// כל המטא־דאטה נגזרת מ-dna.ts — אין כאן ערך מותג קשיח.
 export const metadata: Metadata = {
-  title: { default: `${site.name} — ${site.tagline}`, template: `%s | ${site.name}` },
-  description: 'תשתית אתר תבנית: נגישה בתקן AA, רספונסיבית, עם מערכת ניהול תוכן ואזור אישי ללקוחות.',
-  openGraph: { type: 'website', locale: 'he_IL', siteName: site.name },
+  metadataBase: new URL(dna.seo.siteUrl),
+  title: {
+    default: `${dna.brand.name} — ${dna.brand.tagline}`,
+    template: dna.seo.titleTemplate,
+  },
+  description: dna.seo.description,
+  openGraph: {
+    type: 'website',
+    locale: dna.seo.locale,
+    siteName: dna.brand.name,
+    title: `${dna.brand.name} — ${dna.brand.tagline}`,
+    description: dna.seo.description,
+    images: [asset(dna.seo.ogImage)],
+  },
 };
 
 export const viewport: Viewport = { width: 'device-width', initialScale: 1 };
@@ -17,10 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Heebo:wght@700;800&display=swap"
-        />
+        <link rel="stylesheet" href={dnaFontsHref(dna)} />
+        {/* משתני המותג, נגזרים מ-dna.ts. חייבים להיות לפני שאר הסגנונות. */}
+        <style id="dna-tokens" dangerouslySetInnerHTML={{ __html: dnaCss(dna) }} />
       </head>
       <body>
         <a className="skip-link" href="#main">דלג לתוכן הראשי</a>

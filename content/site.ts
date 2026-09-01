@@ -1,34 +1,32 @@
 /**
- * כל תוכן ה-Placeholder של אתר הדוגמה.
- * בשכפול לפרויקט לקוח — מחליפים את הקובץ הזה + app/tokens.css, וזהו.
- * בשלב ה-CMS הקובץ הזה יוחלף בקריאה למסד הנתונים, באותו מבנה בדיוק.
+ * נוסחי הטקסט של הסקשנים.
+ *
+ * הזהות — שם, פרטי קשר, רשתות, תפריט, קישורים משפטיים — **אינה כאן**.
+ * היא ב-dna.ts, והקובץ הזה נגזר ממנה. כך אין שני מקומות שיכולים לסתור.
+ *
+ * בשלב ה-CMS התוכן שלמטה יוחלף בקריאות למסד — באותו מבנה בדיוק,
+ * כדי שהקומפוננטות לא ישתנו.
  */
 
+import { dna } from '@/dna';
+import { activeNav } from '@/lib/dna';
+
+/** הזהות, כפי שהקומפוננטות צורכות אותה. מקור יחיד: dna.ts */
 export const site = {
-  name: 'שם העסק',
-  logoMark: 'ש',
-  tagline: 'פתרונות מקצועיים לעסקים',
-  phone: '03-0000000',
-  phoneHref: 'tel:+97230000000',
-  email: 'info@example.co.il',
-  address: 'רחוב הדוגמה 1, תל אביב',
-  hours: "ימים א'–ה', 09:00–18:00",
-  social: [
-    { label: 'פייסבוק', href: '#' },
-    { label: 'אינסטגרם', href: '#' },
-    { label: 'לינקדאין', href: '#' },
-  ],
-  accessibilityCoordinator: { name: 'שם רכז הנגישות', email: 'access@example.co.il' },
+  name: dna.brand.name,
+  logoMark: dna.brand.logoMark,
+  logoSrc: dna.brand.logoSrc,
+  tagline: dna.brand.tagline,
+  phone: dna.identity.phone,
+  phoneHref: dna.identity.phoneHref,
+  email: dna.identity.email,
+  address: dna.identity.address,
+  hours: dna.identity.hours,
+  social: dna.identity.social,
+  accessibilityCoordinator: dna.accessibility.coordinator,
 };
 
-export const nav = [
-  { label: 'אודות', href: '#about' },
-  { label: 'שירותים', href: '#services' },
-  { label: 'גלריה', href: '#gallery' },
-  { label: 'המלצות', href: '#testimonials' },
-  { label: 'מאמרים', href: '#posts' },
-  { label: 'צור קשר', href: '#contact' },
-];
+export const nav = activeNav(dna);
 
 export const hero = {
   eyebrow: 'ליווי מקצועי מקצה לקצה',
@@ -115,8 +113,4 @@ export const contact = {
   lead: 'השאירו פרטים ונחזור אליכם בתוך יום עסקים אחד. אין התחייבות ואין שיחות מכירה אגרסיביות.',
 };
 
-export const legalLinks = [
-  { label: 'הצהרת נגישות', href: '/accessibility' },
-  { label: 'מדיניות פרטיות', href: '/privacy' },
-  { label: 'תנאי שימוש', href: '/terms' },
-];
+export const legalLinks = dna.legalLinks;
