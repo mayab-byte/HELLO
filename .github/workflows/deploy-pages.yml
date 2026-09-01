@@ -30,8 +30,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # enablement: true מפעיל את Pages דרך ה-API בריצה הראשונה,
+      # כדי שלא תידרש הגדרה ידנית ב-Settings.
       - uses: actions/configure-pages@v5
         id: pages
+        with:
+          enablement: true
 
       - uses: actions/setup-node@v4
         with:
