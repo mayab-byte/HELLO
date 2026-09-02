@@ -1,41 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import { contact, site } from '@/content/site';
+import { useActionState } from 'react';
+import { submitEnquiry, type EnquiryState } from '@/lib/enquiry';
+import type { SiteContent } from '@/lib/site-content';
 
-type Errors = Partial<Record<'name' | 'phone' | 'email' | 'message', string>>;
+export default function ContactCta({
+  site, contact,
+}: {
+  site: SiteContent['site'];
+  contact: SiteContent['contact'];
+}) {
+  const [state, action, pending] = useActionState<EnquiryState, FormData>(submitEnquiry, {});
+  const err = state.fields ?? {};
 
-export default function ContactCta() {
-  const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState('');
-
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const get = (k: string) => String(data.get(k) ?? '').trim();
-    const next: Errors = {};
-
-    if (get('name').length < 2) next.name = 'יש להזין שם מלא (לפחות 2 תווים).';
-    if (!/^0\d{1,2}-?\d{7}$/.test(get('phone').replace(/\s/g, ''))) next.phone = 'יש להזין מספר טלפון ישראלי תקין, לדוגמה 050-0000000.';
-    if (get('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(get('email'))) next.email = 'כתובת האימייל אינה תקינה.';
-    if (get('message').length < 10) next.message = 'יש לכתוב הודעה באורך 10 תווים לפחות.';
-
-    setErrors(next);
-    if (Object.keys(next).length > 0) {
-      setStatus('');
-      // מעביר פוקוס לשדה השגוי הראשון — דרישת AA לטפסים.
-      const first = Object.keys(next)[0];
-      (e.currentTarget.elements.namedItem(first) as HTMLElement | null)?.focus();
-      return;
-    }
-    // בשלב ה-CMS זה יעבור ל-API. כרגע התשתית מדגימה את מסלול המשוב הנגיש.
-    setStatus('תודה! הפנייה נקלטה ונחזור אליכם בתוך יום עסקים אחד.');
-    e.currentTarget.reset();
-  }
-
-  const field = (name: keyof Errors) => ({
-    'aria-invalid': errors[name] ? true : undefined,
-    'aria-describedby': errors[name] ? `${name}-error` : undefined,
+  const field = (name: keyof typeof err) => ({
+    'aria-invalid': err[name] ? true : undefined,
+    'aria-describedby': err[name] ? `${name}-error` : undefined,
   });
 
   return (
@@ -53,34 +33,46 @@ export default function ContactCta() {
           </ul>
         </div>
 
-        <form className="contact-form" onSubmit={onSubmit} noValidate>
+        <form className="contact-form" action={action} noValidate>
+          {state.error && <p className="adm-alert adm-alert-error" role="alert">{state.error}</p>}
+
+          {/* honeypot — מוסתר גם מקוראי מסך, בוטים בלבד ימלאו אותו */}
+          <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px' }}>
+            <label htmlFor="website">אתר</label>
+            <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+          </div>
+
           <div className="field">
             <label htmlFor="name">שם מלא <span className="req" aria-hidden="true">*</span></label>
             <input id="name" name="name" type="text" autoComplete="name" required {...field('name')} />
-            {errors.name && <p id="name-error" className="field-error">{errors.name}</p>}
+            {err.name && <p id="name-error" className="field-error">{err.name}</p>}
           </div>
 
           <div className="field">
             <label htmlFor="phone">טלפון <span className="req" aria-hidden="true">*</span></label>
             <input id="phone" name="phone" type="tel" autoComplete="tel" required {...field('phone')} />
             <p className="field-hint">לדוגמה: 050-0000000</p>
-            {errors.phone && <p id="phone-error" className="field-error">{errors.phone}</p>}
+            {err.phone && <p id="phone-error" className="field-error">{err.phone}</p>}
           </div>
 
           <div className="field">
             <label htmlFor="email">אימייל</label>
             <input id="email" name="email" type="email" autoComplete="email" {...field('email')} />
-            {errors.email && <p id="email-error" className="field-error">{errors.email}</p>}
+            {err.email && <p id="email-error" className="field-error">{err.email}</p>}
           </div>
 
           <div className="field">
             <label htmlFor="message">במה נוכל לעזור? <span className="req" aria-hidden="true">*</span></label>
             <textarea id="message" name="message" required {...field('message')} />
-            {errors.message && <p id="message-error" className="field-error">{errors.message}</p>}
+            {err.message && <p id="message-error" className="field-error">{err.message}</p>}
           </div>
 
-          <button type="submit" className="btn btn-primary">שליחת הפנייה</button>
-          <p className="form-status" role="status" aria-live="polite">{status}</p>
+          <button type="submit" className="btn btn-primary" disabled={pending}>
+            {pending ? 'שולחת…' : 'שליחת הפנייה'}
+          </button>
+          <p className="form-status" role="status" aria-live="polite">
+            {state.ok ? 'תודה! הפנייה נקלטה ונחזור אליכם בתוך יום עסקים אחד.' : ''}
+          </p>
         </form>
       </div>
     </section>

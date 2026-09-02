@@ -1,7 +1,9 @@
-import { legalLinks, nav, site } from '@/content/site';
+import { legalLinks, nav } from '@/content/site';
 import { asset } from '@/lib/asset';
+import { dna } from '@/dna';
+import type { SiteContent } from '@/lib/site-content';
 
-export default function Footer() {
+export default function Footer({ site }: { site: SiteContent['site'] }) {
   return (
     <footer className="site-footer">
       <div className="container">
@@ -10,7 +12,7 @@ export default function Footer() {
             <h2 className="footer-title">{site.name}</h2>
             <p className="footer-about-text">{site.tagline}</p>
             <ul className="footer-list footer-social">
-              {site.social.map((s) => <li key={s.label}><a href={s.href}>{s.label}</a></li>)}
+              {dna.identity.social.map((s) => <li key={s.label}><a href={s.href}>{s.label}</a></li>)}
             </ul>
           </div>
 

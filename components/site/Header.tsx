@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { nav, site } from '@/content/site';
+import { nav } from '@/content/site';
 import { asset } from '@/lib/asset';
+import type { SiteContent } from '@/lib/site-content';
 
-export default function Header() {
+export default function Header({ site }: { site: SiteContent['site'] }) {
   const [open, setOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);

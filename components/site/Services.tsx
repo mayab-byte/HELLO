@@ -1,6 +1,6 @@
-import { services } from '@/content/site';
+import type { SiteContent } from '@/lib/site-content';
 
-export default function Services() {
+export default function Services({ services }: { services: SiteContent['services'] }) {
   return (
     <section id="services" className="section section-alt" aria-labelledby="services-title">
       <div className="container">

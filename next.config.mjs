@@ -16,8 +16,10 @@ export default function config(phase) {
 
   /** @type {import('next').NextConfig} */
   return {
-    // ייצוא סטטי בפרודקשן — זה מה שמאפשר ל-bake לאפות את הפתקים לתוצר נקי.
-    ...(isDev ? {} : { output: 'export' }),
+    // מאז שיש מערכת ניהול האתר דורש שרת, ולכן אין יותר ייצוא סטטי כברירת מחדל.
+    // STATIC_EXPORT=1 מייצר תצלום סטטי של האתר הציבורי בלבד (ראה scripts/build-static.mjs),
+    // לצורך התצוגה המקדימה ב-GitHub Pages ולצורך אפיית Design Studio.
+    ...(process.env.STATIC_EXPORT === '1' ? { output: 'export' } : {}),
     images: { unoptimized: true },
     trailingSlash: true,
     ...(basePath ? { basePath, assetPrefix: basePath } : {}),

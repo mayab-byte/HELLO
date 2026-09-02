@@ -9,3 +9,5 @@ public/uploads/*
 !public/uploads/.gitkeep
 
 preview.html
+.env
+.admin-parked/

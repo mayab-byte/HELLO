@@ -1,7 +1,7 @@
-import { posts } from '@/content/site';
 import { asset } from '@/lib/asset';
+import type { SiteContent } from '@/lib/site-content';
 
-export default function Posts() {
+export default function Posts({ posts }: { posts: SiteContent['posts'] }) {
   return (
     <section id="posts" className="section section-alt" aria-labelledby="posts-title">
       <div className="container">

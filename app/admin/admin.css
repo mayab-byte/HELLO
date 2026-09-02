@@ -1,0 +1,192 @@
+/* ========================================================================
+   מערכת הניהול. עברית RTL, נגישות AA, יונקת את הצבעים מ-dna.ts
+   כמו האתר עצמו — כדי שהמערכת תרגיש חלק מהמותג של הלקוח.
+   ======================================================================== */
+
+.adm {
+  --adm-sidebar: 244px;
+  min-height: 100vh;
+  background: var(--bg-alt);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+/* ── מסך ההתחברות ── */
+.adm-auth {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: var(--space-lg);
+  background: var(--brand-soft);
+}
+.adm-auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+.adm-auth-brand {
+  display: flex; align-items: center; gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800;
+}
+.adm-auth-mark {
+  display: grid; place-items: center; width: 40px; height: 40px;
+  border-radius: var(--radius-sm); background: var(--brand); color: var(--text-on-brand);
+}
+.adm-auth-title { font-size: var(--fs-h3); margin-bottom: var(--space-2xs); }
+.adm-auth-lead { color: var(--text-muted); font-size: var(--fs-small); margin-bottom: var(--space-lg); }
+
+/* ── שלד ── */
+.adm-shell { display: grid; grid-template-columns: var(--adm-sidebar) 1fr; min-height: 100vh; }
+.adm-side {
+  display: flex; flex-direction: column; gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--text); color: #cbd5e1;
+}
+.adm-side-brand {
+  display: flex; align-items: center; gap: var(--space-sm);
+  color: #fff; font-family: var(--font-heading); font-weight: 800;
+}
+.adm-nav { display: grid; gap: 2px; }
+.adm-nav-group {
+  margin-top: var(--space-md); padding-inline-start: var(--space-xs);
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+  color: #94a3b8; text-transform: uppercase;
+}
+.adm-nav a {
+  display: flex; align-items: center; gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: var(--fs-small);
+}
+.adm-nav a:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.adm-nav a[aria-current='page'] { background: var(--brand); color: var(--text-on-brand); }
+.adm-side :focus-visible { outline-color: var(--focus-on-dark); }
+
+.adm-main { display: flex; flex-direction: column; min-width: 0; }
+.adm-top {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-md);
+  padding: var(--space-md) var(--space-xl);
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.adm-who { font-size: var(--fs-small); color: var(--text-muted); }
+.adm-body { padding: var(--space-xl); display: grid; gap: var(--space-xl); align-content: start; }
+
+@media (max-width: 860px) {
+  .adm-shell { grid-template-columns: 1fr; }
+  .adm-side { flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--space-sm); }
+  .adm-nav { grid-auto-flow: column; grid-auto-columns: max-content; overflow-x: auto; }
+  .adm-nav-group { display: none; }
+  .adm-body { padding: var(--space-lg) var(--space-md); }
+}
+
+/* ── כותרות ומקטעים ── */
+.adm-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-md); }
+.adm-h1 { font-size: var(--fs-h2); }
+.adm-sub { color: var(--text-muted); font-size: var(--fs-small); }
+
+.adm-card {
+  padding: var(--space-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.adm-card + .adm-card { margin-top: var(--space-lg); }
+.adm-card-title { font-size: var(--fs-h3); margin-bottom: var(--space-md); }
+
+.adm-stats { display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.adm-stat { padding: var(--space-lg); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.adm-stat-value { display: block; font-family: var(--font-heading); font-size: var(--fs-h2); color: var(--brand-strong); font-variant-numeric: tabular-nums; }
+.adm-stat-label { display: block; font-size: var(--fs-small); color: var(--text-muted); }
+
+/* ── טפסים ── */
+.adm-form { display: grid; gap: var(--space-md); }
+.adm-grid-2 { display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.adm-field { display: grid; gap: 6px; }
+.adm-field label { font-weight: 600; font-size: var(--fs-small); }
+.adm-field .req { color: var(--error); }
+.adm-field input, .adm-field textarea, .adm-field select {
+  min-height: 46px; padding: var(--space-xs) var(--space-sm);
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-family: inherit;
+}
+.adm-field textarea { min-height: 130px; resize: vertical; line-height: var(--lh-body); }
+.adm-field input[aria-invalid='true'], .adm-field textarea[aria-invalid='true'] { border-color: var(--error); }
+.adm-hint { font-size: var(--fs-small); color: var(--text-muted); }
+.adm-error { font-size: var(--fs-small); color: var(--error); font-weight: 600; }
+
+.adm-alert {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  border-inline-start: 4px solid;
+  font-size: var(--fs-small); font-weight: 600;
+}
+.adm-alert-error { background: #fef2f2; border-color: var(--error); color: #7f1d1d; }
+.adm-alert-ok { background: #f0fdf4; border-color: var(--success); color: #14532d; }
+.adm-alert-info { background: var(--brand-soft); border-color: var(--brand); color: var(--brand-strong); }
+
+/* ── כפתורים ── */
+.adm-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+  min-height: 44px; padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text);
+  font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+}
+.adm-btn:hover { background: var(--bg-alt); }
+.adm-btn-primary { background: var(--brand); border-color: var(--brand); color: var(--text-on-brand); }
+.adm-btn-primary:hover { background: var(--brand-strong); border-color: var(--brand-strong); }
+.adm-btn-danger { color: var(--error); border-color: #fecaca; }
+.adm-btn-danger:hover { background: #fef2f2; }
+.adm-btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+.adm-actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+
+/* ── טבלאות ── */
+.adm-table-wrap { overflow-x: auto; }
+.adm-table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); }
+.adm-table th, .adm-table td {
+  padding: var(--space-sm); text-align: start;
+  border-bottom: 1px solid var(--border); vertical-align: middle;
+}
+.adm-table th { font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+.adm-table tbody tr:hover { background: var(--bg-alt); }
+.adm-table .num { font-variant-numeric: tabular-nums; }
+
+.adm-pill {
+  display: inline-block; padding: 2px 10px; border-radius: var(--radius-pill);
+  font-size: 0.75rem; font-weight: 700;
+}
+.adm-pill-published { background: #dcfce7; color: #14532d; }
+.adm-pill-draft { background: #fef3c7; color: #78350f; }
+.adm-pill-admin { background: var(--brand-soft); color: var(--brand-strong); }
+.adm-pill-editor { background: #f1f5f9; color: #334155; }
+
+.adm-empty { padding: var(--space-2xl) var(--space-lg); text-align: center; color: var(--text-muted); }
+
+/* ── מדיה ── */
+.adm-media-grid { display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.adm-media-item { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+.adm-media-item img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.adm-media-meta { padding: var(--space-xs); font-size: 0.75rem; color: var(--text-muted); }
+.adm-media-meta strong { display: block; color: var(--text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── 2FA ── */
+.adm-qr { display: grid; gap: var(--space-md); justify-items: center; padding: var(--space-lg); background: var(--bg-alt); border-radius: var(--radius); }
+.adm-qr img, .adm-qr svg { width: 200px; height: 200px; background: #fff; padding: 8px; border-radius: var(--radius-sm); }
+.adm-secret {
+  font-family: ui-monospace, monospace; font-size: 1rem; letter-spacing: 2px;
+  padding: var(--space-xs) var(--space-sm); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-sm); word-break: break-all;
+}
+.adm-codes { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-xs); }
+.adm-codes code {
+  padding: var(--space-xs); text-align: center;
+  background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: var(--fs-small); letter-spacing: 1px;
+}

@@ -1,4 +1,5 @@
 import { dna } from '@/dna';
+import { getSiteContent } from '@/lib/site-content';
 import Header from '@/components/site/Header';
 import Hero from '@/components/site/Hero';
 import TrustBar from '@/components/site/TrustBar';
@@ -11,26 +12,29 @@ import ContactCta from '@/components/site/ContactCta';
 import Footer from '@/components/site/Footer';
 
 /**
- * הרכב עמוד הבית. אילו סקשנים מוצגים נקבע ב-dna.ts → sections,
- * כך שהתאמה ללקוח לא דורשת נגיעה בקוד.
+ * התוכן נקרא מהמסד בכל בקשה, כדי ששינוי במערכת הניהול יופיע מיד.
+ * מה שהלקוח לא ערך עדיין מגיע מ-content/site.ts.
  */
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
   const on = dna.sections;
+  const c = await getSiteContent();
 
   return (
     <>
-      <Header />
+      <Header site={c.site} />
       <main id="main">
-        {on.hero && <Hero />}
+        {on.hero && <Hero hero={c.hero} />}
         {on.trust && <TrustBar />}
-        {on.services && <Services />}
-        {on.about && <About />}
-        {on.gallery && <Gallery />}
-        {on.testimonials && <Testimonials />}
-        {on.posts && <Posts />}
-        {on.contact && <ContactCta />}
+        {on.services && <Services services={c.services} />}
+        {on.about && <About about={c.about} />}
+        {on.gallery && <Gallery gallery={c.gallery} />}
+        {on.testimonials && <Testimonials testimonials={c.testimonials} />}
+        {on.posts && <Posts posts={c.posts} />}
+        {on.contact && <ContactCta site={c.site} contact={c.contact} />}
       </main>
-      <Footer />
+      <Footer site={c.site} />
     </>
   );
 }

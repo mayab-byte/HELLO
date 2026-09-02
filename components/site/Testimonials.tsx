@@ -1,7 +1,7 @@
-import { testimonials } from '@/content/site';
 import { asset } from '@/lib/asset';
+import type { SiteContent } from '@/lib/site-content';
 
-export default function Testimonials() {
+export default function Testimonials({ testimonials }: { testimonials: SiteContent['testimonials'] }) {
   return (
     <section id="testimonials" className="section" aria-labelledby="testimonials-title">
       <div className="container">

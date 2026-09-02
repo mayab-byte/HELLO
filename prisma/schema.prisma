@@ -1,0 +1,206 @@
+// מודל הנתונים של תשתית האתר.
+// Postgres בפיתוח ובפרודקשן כאחד — אותו מסד, בלי הפתעות במעבר.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────── משתמשים ───────────────────────────
+
+enum Role {
+  ADMIN       // BMF360 — הכל, כולל פתיחת משתמשים
+  SITE_EDITOR // הלקוח — עריכת תוכן בלבד
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  role         Role     @default(SITE_EDITOR)
+  passwordHash String
+
+  // אימות דו-שלבי (TOTP). חובה ל-ADMIN.
+  totpSecret    String?
+  totpEnabledAt DateTime?
+  backupCodes   BackupCode[]
+
+  // הגבלת ניסיונות התחברות
+  failedLogins Int       @default(0)
+  lockedUntil  DateTime?
+
+  active    Boolean   @default(true)
+  lastLogin DateTime?
+  sessions  Session[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([email])
+}
+
+/// קוד גיבוי חד-פעמי ל-2FA. נשמר כגיבוב, מסומן כמנוצל אחרי שימוש.
+model BackupCode {
+  id     String    @id @default(cuid())
+  userId String
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hash   String
+  usedAt DateTime?
+
+  @@index([userId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  userAgent String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ─────────────────────────── תוכן ───────────────────────────
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Post {
+  id       String        @id @default(cuid())
+  slug     String        @unique
+  title    String
+  excerpt  String?
+  body     String        @db.Text
+  category String?
+  status   ContentStatus @default(DRAFT)
+
+  imageId String?
+  image   Media?  @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model Service {
+  id      String        @id @default(cuid())
+  title   String
+  icon    String?
+  summary String
+  body    String?       @db.Text
+  ctaHref String?
+  order   Int           @default(0)
+  status  ContentStatus @default(PUBLISHED)
+
+  imageId String?
+  image   Media?  @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, order])
+}
+
+model GalleryItem {
+  id       String        @id @default(cuid())
+  title    String?
+  category String?
+  order    Int           @default(0)
+  status   ContentStatus @default(PUBLISHED)
+
+  imageId String
+  image   Media  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, order])
+}
+
+model Testimonial {
+  id     String        @id @default(cuid())
+  name   String
+  role   String?
+  quote  String        @db.Text
+  rating Int           @default(5)
+  order  Int           @default(0)
+  status ContentStatus @default(PUBLISHED)
+
+  avatarId String?
+  avatar   Media?  @relation(fields: [avatarId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, order])
+}
+
+/// ספריית המדיה. alt הוא שדה חובה — בלעדיו אי אפשר לפרסם תמונה.
+model Media {
+  id       String @id @default(cuid())
+  path     String @unique
+  alt      String
+  filename String
+  mimeType String
+  bytes    Int
+  width    Int?
+  height   Int?
+
+  posts        Post[]
+  services     Service[]
+  gallery      GalleryItem[]
+  testimonials Testimonial[]
+
+  createdAt DateTime @default(now())
+}
+
+/// ההגדרות שהלקוח עורך: טקסטים גלובליים ופרטי קשר.
+/// שורה אחת בלבד (id = "singleton").
+model SiteSettings {
+  id String @id @default("singleton")
+
+  brandName String
+  tagline   String
+  phone     String
+  email     String
+  address   String
+  hours     String
+
+  heroEyebrow String
+  heroTitle   String
+  heroLead    String @db.Text
+
+  aboutTitle String
+  aboutBody  String @db.Text
+
+  contactTitle String
+  contactLead  String @db.Text
+
+  updatedAt DateTime @updatedAt
+}
+
+/// פנייה מטופס יצירת הקשר.
+model Enquiry {
+  id      String  @id @default(cuid())
+  name    String
+  phone   String
+  email   String?
+  message String  @db.Text
+  handled Boolean @default(false)
+  ip      String?
+
+  createdAt DateTime @default(now())
+
+  @@index([handled, createdAt])
+}

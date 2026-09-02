@@ -1,7 +1,7 @@
-import { about } from '@/content/site';
 import { asset } from '@/lib/asset';
+import type { SiteContent } from '@/lib/site-content';
 
-export default function About() {
+export default function About({ about }: { about: SiteContent['about'] }) {
   return (
     <section id="about" className="section" aria-labelledby="about-title">
       <div className="container about-inner">

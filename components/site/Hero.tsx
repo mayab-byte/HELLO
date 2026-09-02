@@ -1,7 +1,7 @@
-import { hero } from '@/content/site';
 import { asset } from '@/lib/asset';
+import type { SiteContent } from '@/lib/site-content';
 
-export default function Hero() {
+export default function Hero({ hero }: { hero: SiteContent['hero'] }) {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="container hero-inner">

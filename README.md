@@ -17,6 +17,18 @@ npm run dev      # http://localhost:3000
 | `npm run build` | `next build` → `out/` ואז אפיית הפתקים |
 | `npm run bake` | אפייה בלבד, על `out/` קיים |
 
+## מערכת ניהול
+
+הלקוח נכנס ב-`/admin` ומנהל את התוכן בעצמו: טקסטים, תמונות, מאמרים,
+שירותים, גלריה והמלצות. התחברות עם אימות דו-שלבי, הרשאות ופניות מהטופס.
+ראה [`docs/CMS.md`](docs/CMS.md).
+
+```bash
+createdb sitebase && cp .env.example .env   # למלא DATABASE_URL ו-SESSION_SECRET
+npx prisma migrate deploy && npm run db:seed
+npm run dev                                  # http://localhost:3000/admin
+```
+
 ## Design Studio
 
 עורך ויזואלי חי לסגירת פינישים בעכבר: `http://localhost:3000/?edit`
@@ -65,6 +77,9 @@ Next.js מזוהה אוטומטית, אין מה להגדיר. דומיין מו
 
 ```
 dna.ts        ★ ה-DNA של האתר — הקובץ שעורכים בכל פרויקט
+prisma/       סכימת מסד הנתונים
+lib/          מסד, אימות, תוכן, מדיה
+app/admin/    מערכת הניהול
 app/          layout, עמוד הבית, טוקנים ו-CSS גלובלי
 components/   קומפוננטות האתר
 content/      התוכן (יוחלף ב-CMS באותו מבנה)
@@ -76,5 +91,6 @@ docs/         אפיון ותיעוד
 ## תיעוד
 
 - [`docs/DNA.md`](docs/DNA.md) — קובץ ה-DNA
+- [`docs/CMS.md`](docs/CMS.md) — מערכת הניהול והאבטחה
 - [`docs/SPEC.md`](docs/SPEC.md) — אפיון התשתית המלא
 - [`docs/DESIGN-STUDIO.md`](docs/DESIGN-STUDIO.md) — העורך הוויזואלי

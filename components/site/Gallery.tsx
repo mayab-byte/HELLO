@@ -1,7 +1,7 @@
-import { gallery } from '@/content/site';
 import { asset } from '@/lib/asset';
+import type { SiteContent } from '@/lib/site-content';
 
-export default function Gallery() {
+export default function Gallery({ gallery }: { gallery: SiteContent['gallery'] }) {
   return (
     <section id="gallery" className="section section-alt" aria-labelledby="gallery-title">
       <div className="container">
