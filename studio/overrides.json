@@ -1,0 +1,9 @@
+{
+  "text": {},
+  "fonts": [],
+  "screens": {
+    "desktop": { "styles": {}, "hidden": [] },
+    "tablet": { "styles": {}, "hidden": [] },
+    "mobile": { "styles": {}, "hidden": [] }
+  }
+}
