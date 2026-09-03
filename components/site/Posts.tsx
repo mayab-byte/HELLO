@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { asset } from '@/lib/asset';
 import type { SiteContent } from '@/lib/site-content';
 
@@ -26,6 +27,9 @@ export default function Posts({ posts }: { posts: SiteContent['posts'] }) {
             </li>
           ))}
         </ul>
+        <p className="section-more">
+          <Link className="btn btn-secondary" href={asset('/blog')}>לכל המאמרים</Link>
+        </p>
       </div>
     </section>
   );

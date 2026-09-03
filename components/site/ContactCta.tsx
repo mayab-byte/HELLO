@@ -36,8 +36,10 @@ export default function ContactCta({
         <form className="contact-form" action={action} noValidate>
           {state.error && <p className="adm-alert adm-alert-error" role="alert">{state.error}</p>}
 
-          {/* honeypot — מוסתר גם מקוראי מסך, בוטים בלבד ימלאו אותו */}
-          <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px' }}>
+          {/* honeypot — מוסתר גם מקוראי מסך, בוטים בלבד ימלאו אותו.
+              ההסתרה היא ב-clip ולא בהזזה ל-left:-9999px: הזזה כזו מרחיבה
+              את רוחב המסמך ב-RTL ויוצרת גלילה אופקית בכל העמוד. */}
+          <div aria-hidden="true" className="honeypot">
             <label htmlFor="website">אתר</label>
             <input id="website" name="website" tabIndex={-1} autoComplete="off" />
           </div>

@@ -236,3 +236,53 @@ ul[class] { list-style: none; padding: 0; }
 .footer-bottom { display: flex; flex-wrap: wrap; gap: var(--space-md); justify-content: space-between; margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid rgba(255,255,255,0.15); font-size: var(--fs-small); }
 .footer-legal { display: flex; flex-wrap: wrap; gap: var(--space-md); margin: 0; }
 @media (min-width: 700px) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; } }
+
+/* ====================== עמודים פנימיים ====================== */
+.page-header {
+  padding-block: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+  background: var(--brand-soft);
+  border-bottom: 1px solid var(--border);
+}
+.page-title { font-size: var(--fs-h1); margin-bottom: var(--space-sm); }
+.page-lead { font-size: var(--fs-lead); color: var(--text-muted); max-width: 62ch; }
+
+.breadcrumbs { margin-bottom: var(--space-md); font-size: var(--fs-small); }
+.breadcrumbs ol { display: flex; flex-wrap: wrap; gap: var(--space-xs); list-style: none; margin: 0; padding: 0; }
+.breadcrumbs li { color: var(--text-muted); }
+.breadcrumbs li + li::before { content: '‹'; margin-inline-end: var(--space-xs); color: var(--border); }
+.breadcrumbs a { color: var(--brand-strong); }
+.breadcrumbs [aria-current='page'] { color: var(--text); font-weight: 600; }
+
+/* ====================== טקסט ארוך ====================== */
+.prose > * + * { margin-top: var(--space-md); }
+.prose h2 { font-size: var(--fs-h3); margin-top: var(--space-xl); }
+.prose p, .prose li { color: var(--text-muted); }
+.prose ul { display: grid; gap: var(--space-xs); padding-inline-start: 1.3rem; }
+.prose img { margin-block: var(--space-lg); box-shadow: var(--shadow); }
+.prose a { color: var(--brand-strong); }
+
+/* ====================== באנר עוגיות ====================== */
+.cookie-banner {
+  position: fixed; z-index: 200;
+  inset-inline: var(--gutter); bottom: var(--gutter);
+  max-width: 640px; margin-inline: auto;
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.cookie-text { flex: 1 1 260px; font-size: var(--fs-small); color: var(--text-muted); }
+.cookie-text a { color: var(--brand-strong); }
+.cookie-actions { display: flex; gap: var(--space-sm); }
+.cookie-actions .btn { min-height: 44px; padding-inline: var(--space-lg); }
+.section-more { margin-top: var(--space-xl); text-align: center; }
+
+/* שדה מלכודת לבוטים. clip ולא הזזה — הזזה מרחיבה את המסמך ב-RTL. */
+.honeypot {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

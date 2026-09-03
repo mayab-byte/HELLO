@@ -80,10 +80,6 @@ export function useStudio() {
     });
   }, [commit]);
 
-  const setText = useCallback((sel: string, html: string) => {
-    commit((d) => { if (html === '') delete d.text[sel]; else d.text[sel] = html; return d; });
-  }, [commit]);
-
   const toggleHidden = useCallback((screen: ScreenKey, sel: string) => {
     commit((d) => {
       const list = d.screens[screen].hidden;
@@ -125,6 +121,6 @@ export function useStudio() {
   return {
     ov, ready, commit, undo, redo,
     canUndo: past.current.length > 0, canRedo: future.current.length > 0,
-    setStyle, setText, toggleHidden, applyToOtherScreens, resetElement, resetAll, addFont,
+    setStyle, toggleHidden, applyToOtherScreens, resetElement, resetAll, addFont,
   };
 }

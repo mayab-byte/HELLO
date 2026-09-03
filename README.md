@@ -14,8 +14,9 @@ npm run dev      # http://localhost:3000
 | פקודה | מה היא עושה |
 |---|---|
 | `npm run dev` | Next dev + שרת ה-Design Studio |
-| `npm run build` | `next build` → `out/` ואז אפיית הפתקים |
-| `npm run bake` | אפייה בלבד, על `out/` קיים |
+| `npm run build` | בדיקת פלטה, אפיית פתקי Studio, ובניית האפליקציה |
+| `npm run db:seed` | מנהל ראשון + תוכן התחלה |
+| `npm start` | הרצת האפליקציה הבנויה |
 
 ## מערכת ניהול
 
@@ -55,23 +56,37 @@ npm run dev                                  # http://localhost:3000/admin
 
 ## העלאה לאוויר
 
-### GitHub Pages — הכי מהיר, בלי חשבון נוסף
-ה-workflow כבר במאגר. הפעלה חד-פעמית:
-**Settings → Pages → Source: `GitHub Actions`**
+האתר דורש שרת Node ומסד Postgres — מערכת הניהול קוראת עוגיות וטופס
+יצירת הקשר הוא Server Action. אחסון סטטי בלבד אינו מספיק.
 
-מאותו רגע כל `push` בונה ומפרסם אוטומטית.
-הכתובת: `https://<שם-המשתמש>.github.io/<שם-המאגר>/`
+### Vercel + Neon — המסלול המומלץ
+1. **neon.tech** → Create project → העתקת ה-Connection string
+2. **vercel.com** → Import Git Repository → בחירת המאגר
+3. Settings → Environment Variables → `DATABASE_URL` ו-`SESSION_SECRET`
+4. Deploy
 
-### Vercel — מומלץ לאתר של לקוח אמיתי
-`vercel.com` → Import Git Repository → בחירת המאגר → Deploy.
-Next.js מזוהה אוטומטית, אין מה להגדיר. דומיין מותאם בלחיצה.
-
-### כל אחסון סטטי
-`npm run build` מייצר את `out/` — HTML/CSS/JS בלבד.
-מעלים את התיקייה לכל שרת (Netlify, Cloudflare Pages, cPanel, S3).
+שניהם חינם ברמה שנדרשת לנו. ראה [`docs/CMS.md`](docs/CMS.md).
 
 > **תת-נתיב:** אם האתר לא יושב בשורש הדומיין, יש להעביר `BASE_PATH=/הנתיב`
-> בזמן הבנייה. ב-GitHub Pages זה קורה אוטומטית. בשורש — לא צריך כלום.
+> בזמן הבנייה. בשורש — לא צריך כלום.
+
+> ⚠️ **אחסון תמונות.** התמונות נשמרות ב-`public/uploads/` על הדיסק.
+> ב-Vercel הדיסק אינו נשמר בין פריסות. לפני שלקוח מעלה תמונות יש לעבור
+> לאחסון חיצוני (Vercel Blob / S3) — הכתיבה מרוכזת ב-`lib/media.ts`.
+
+## מפת האתר
+
+| עמוד | | עמוד | |
+|---|---|---|---|
+| `/` | עמוד הבית | `/blog` · `/blog/[slug]` | מאמרים |
+| `/about` | אודות | `/contact` | צור קשר |
+| `/services` · `/services/[id]` | שירותים | `/accessibility` | הצהרת נגישות |
+| `/gallery` | גלריה | `/privacy` | מדיניות פרטיות |
+| `/testimonials` | המלצות | `/terms` | תנאי שימוש |
+| `/admin` | מערכת הניהול | `/sitemap.xml` · `/robots.txt` | SEO |
+
+עמוד פנימי קיים רק אם הסקשן שלו פעיל ב-`dna.ts`. כיבוי סקשן מסיר את
+העמוד, את הקישור בתפריט ואת השורה במפת האתר — בבת אחת.
 
 ## מבנה
 
@@ -92,5 +107,6 @@ docs/         אפיון ותיעוד
 
 - [`docs/DNA.md`](docs/DNA.md) — קובץ ה-DNA
 - [`docs/CMS.md`](docs/CMS.md) — מערכת הניהול והאבטחה
+- [`docs/CLIENT-GUIDE.md`](docs/CLIENT-GUIDE.md) — מדריך ללקוח, בלי ז'רגון
 - [`docs/SPEC.md`](docs/SPEC.md) — אפיון התשתית המלא
 - [`docs/DESIGN-STUDIO.md`](docs/DESIGN-STUDIO.md) — העורך הוויזואלי

@@ -6,12 +6,11 @@
     "dev": "node scripts/dev.mjs",
     "dev:next": "next dev",
     "studio:server": "node scripts/studio-server.mjs",
-    "build": "node scripts/check-dna.mjs && next build",
-    "build:raw": "next build",
-    "bake": "node scripts/bake.mjs",
+    "prebuild": "node scripts/check-dna.mjs && node scripts/bake.mjs",
+    "build": "next build",
     "start": "next start",
     "check:dna": "node scripts/check-dna.mjs",
-    "build:static": "node scripts/build-static.mjs",
+    "bake": "node scripts/bake.mjs",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:seed": "node scripts/seed.mjs",
@@ -29,7 +28,6 @@
     "@types/node": "22.10.7",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
-    "linkedom": "^0.18.13",
     "typescript": "5.7.3"
   }
 }

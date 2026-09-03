@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './studio.css';
 import { SCREENS, type ScreenKey } from './types';
 import { setPreviewWidth } from './apply';
-import { buildSelector, describe, isTextEditable, resolveTarget } from './selector';
+import { buildSelector, describe, resolveTarget } from './selector';
 import { collectEditable, depthOf, isSelectable } from './picker';
 import { useStudio } from './useStudio';
 import { allFonts } from './fonts';
@@ -102,15 +102,10 @@ export default function Studio() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const mod = e.metaKey || e.ctrlKey;
-      const inField = (e.target as HTMLElement)?.closest?.('input, textarea, [contenteditable="true"]');
+      const inField = (e.target as HTMLElement)?.closest?.('input, textarea');
       if (mod && e.key.toLowerCase() === 'z' && !inField) {
         e.preventDefault();
         e.shiftKey ? s.redo() : s.undo();
-      }
-      if (mod && e.key.toLowerCase() === 'b' && inField?.getAttribute('contenteditable') === 'true') {
-        e.preventDefault();
-        document.execCommand('bold');
-        commitInline(inField as HTMLElement);
       }
       if (e.key === 'Escape' && !inField) { setSel(null); setSelEl(null); setSelBox(null); }
     };
@@ -135,45 +130,6 @@ export default function Studio() {
   }, [styles, selEl]);
 
   const hidden = sel ? s.ov.screens[screen].hidden.includes(sel) : false;
-
-  // ---------- עריכת טקסט inline ----------
-  const commitInline = useCallback((el: HTMLElement) => {
-    const selector = buildSelector(el);
-    if (selector) s.setText(selector, el.innerHTML);
-  }, [s]);
-
-  useEffect(() => {
-    const dbl = (e: MouseEvent) => {
-      const t = e.target as Element;
-      if (!(t instanceof Element) || t.closest('.ds-root')) return;
-      const target = resolveTarget(t) as HTMLElement;
-      if (!isTextEditable(target)) { say('כותרת מפוצלת לאנימציה — עיצוב בלבד, בלי עריכת נוסח'); return; }
-      e.preventDefault();
-      target.contentEditable = 'true';
-      target.focus();
-      const finish = () => {
-        target.contentEditable = 'false';
-        commitInline(target);
-        target.removeEventListener('blur', finish);
-        target.removeEventListener('keydown', keys);
-      };
-      const keys = (ke: KeyboardEvent) => {
-        if (ke.key === 'Enter' && !ke.shiftKey) {
-          ke.preventDefault();
-          document.execCommand('insertHTML', false, '<br><br>');
-        } else if (ke.key === 'Enter' && ke.shiftKey) {
-          ke.preventDefault();
-          document.execCommand('insertHTML', false, '<br>');
-        } else if (ke.key === 'Escape') {
-          finish();
-        }
-      };
-      target.addEventListener('blur', finish);
-      target.addEventListener('keydown', keys);
-    };
-    document.addEventListener('dblclick', dbl, true);
-    return () => document.removeEventListener('dblclick', dbl, true);
-  }, [commitInline, say]);
 
   // ---------- עץ המבנה ----------
   const tree = useMemo(() => {
@@ -209,7 +165,7 @@ export default function Studio() {
 
   const copyOut = useCallback(async () => {
     const { buildLiveCss } = await import('./apply');
-    const payload = `/* Design Studio — CSS */\n${buildLiveCss(s.ov)}\n\n/* טקסטים */\n${JSON.stringify(s.ov.text, null, 2)}`;
+    const payload = `/* Design Studio — CSS */\n${buildLiveCss(s.ov)}`;
     try { await navigator.clipboard.writeText(payload); say('הועתק ללוח'); }
     catch { say('ההעתקה נכשלה'); }
   }, [s.ov, say]);
@@ -301,17 +257,9 @@ export default function Studio() {
                 </button>
               </div>
 
-              {/* ---------- טקסט ---------- */}
-              {selEl && isTextEditable(selEl) && (
-                <Section title="טקסט (משותף לכל המסכים)" open>
-                  <textarea
-                    className="ds-text ds-textarea"
-                    value={s.ov.text[sel] ?? selEl.innerHTML}
-                    onChange={(e) => s.setText(sel, e.target.value)}
-                  />
-                  <p className="ds-hint">דאבל-קליק על הטקסט בדף לעריכה במקום. Enter = פסקה, Shift+Enter = שורה, ⌘B = בולד.</p>
-                </Section>
-              )}
+              {/* עריכת נוסח נעשית במערכת הניהול (/admin), לא כאן.
+                  Design Studio אחראי על עיצוב בלבד: מה שהוא מייצר נאפה
+                  ל-CSS, ולטקסט אין לאן להיאפות. */}
 
               {/* ---------- טיפוגרפיה ---------- */}
               <Section title="טיפוגרפיה">

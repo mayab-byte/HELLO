@@ -139,14 +139,15 @@ export const dna: Dna = {
   },
 
   // ─── תפריט ──────────────────────────────────────────────────────────
-  // section מקשר כל פריט לסקשן שלו — כיבוי סקשן מסיר גם את הקישור אליו.
+  // הניווט מצביע לעמודים מלאים; עמוד הבית מציג תקציר של כל אחד מהם.
+  // section מקשר כל פריט לסקשן שלו — כיבוי סקשן מסיר גם את העמוד וגם את הקישור.
   nav: [
-    { label: 'אודות', href: '#about', section: 'about' },
-    { label: 'שירותים', href: '#services', section: 'services' },
-    { label: 'גלריה', href: '#gallery', section: 'gallery' },
-    { label: 'המלצות', href: '#testimonials', section: 'testimonials' },
-    { label: 'מאמרים', href: '#posts', section: 'posts' },
-    { label: 'צור קשר', href: '#contact', section: 'contact' },
+    { label: 'אודות', href: '/about', section: 'about' },
+    { label: 'שירותים', href: '/services', section: 'services' },
+    { label: 'גלריה', href: '/gallery', section: 'gallery' },
+    { label: 'המלצות', href: '/testimonials', section: 'testimonials' },
+    { label: 'מאמרים', href: '/blog', section: 'posts' },
+    { label: 'צור קשר', href: '/contact', section: 'contact' },
   ],
 
   legalLinks: [

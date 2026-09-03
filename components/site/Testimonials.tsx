@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { asset } from '@/lib/asset';
 import type { SiteContent } from '@/lib/site-content';
 
@@ -29,6 +30,9 @@ export default function Testimonials({ testimonials }: { testimonials: SiteConte
             </li>
           ))}
         </ul>
+        <p className="section-more">
+          <Link className="btn btn-secondary" href={asset('/testimonials')}>לכל ההמלצות</Link>
+        </p>
       </div>
     </section>
   );

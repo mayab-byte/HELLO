@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { asset } from '@/lib/asset';
 import type { SiteContent } from '@/lib/site-content';
 
@@ -18,6 +19,9 @@ export default function Gallery({ gallery }: { gallery: SiteContent['gallery'] }
             </li>
           ))}
         </ul>
+        <p className="section-more">
+          <Link className="btn btn-secondary" href={asset('/gallery')}>לגלריה המלאה</Link>
+        </p>
       </div>
     </section>
   );

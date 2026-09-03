@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { asset } from '@/lib/asset';
 import type { SiteContent } from '@/lib/site-content';
 
 export default function Services({ services }: { services: SiteContent['services'] }) {
@@ -21,6 +23,9 @@ export default function Services({ services }: { services: SiteContent['services
             </li>
           ))}
         </ul>
+        <p className="section-more">
+          <Link className="btn btn-secondary" href={asset('/services')}>לכל השירותים</Link>
+        </p>
       </div>
     </section>
   );

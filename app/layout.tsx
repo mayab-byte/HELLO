@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+// אחרון בכוונה: הפתקים של Design Studio מנצחים בקסקדה בלי !important.
+import './studio-baked.css';
 import StudioLoader from '@/studio/StudioLoader';
 import { dna } from '@/dna';
 import { dnaCss, dnaFontsHref } from '@/lib/dna';

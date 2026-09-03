@@ -16,10 +16,8 @@ export default function config(phase) {
 
   /** @type {import('next').NextConfig} */
   return {
-    // מאז שיש מערכת ניהול האתר דורש שרת, ולכן אין יותר ייצוא סטטי כברירת מחדל.
-    // STATIC_EXPORT=1 מייצר תצלום סטטי של האתר הציבורי בלבד (ראה scripts/build-static.mjs),
-    // לצורך התצוגה המקדימה ב-GitHub Pages ולצורך אפיית Design Studio.
-    ...(process.env.STATIC_EXPORT === '1' ? { output: 'export' } : {}),
+    // האתר דורש שרת: מערכת הניהול קוראת cookies() והטופס משתמש ב-Server Action,
+    // ושניהם אינם נתמכים בייצוא סטטי. הפריסה היא לשרת Node (Vercel).
     images: { unoptimized: true },
     trailingSlash: true,
     ...(basePath ? { basePath, assetPrefix: basePath } : {}),

@@ -1,6 +1,5 @@
 import { dna } from '@/dna';
 import { getSiteContent } from '@/lib/site-content';
-import Header from '@/components/site/Header';
 import Hero from '@/components/site/Hero';
 import TrustBar from '@/components/site/TrustBar';
 import Services from '@/components/site/Services';
@@ -9,21 +8,33 @@ import Gallery from '@/components/site/Gallery';
 import Testimonials from '@/components/site/Testimonials';
 import Posts from '@/components/site/Posts';
 import ContactCta from '@/components/site/ContactCta';
-import Footer from '@/components/site/Footer';
 
 /**
- * התוכן נקרא מהמסד בכל בקשה, כדי ששינוי במערכת הניהול יופיע מיד.
- * מה שהלקוח לא ערך עדיין מגיע מ-content/site.ts.
+ * העמוד נבנה סטטית ומתרענן דרך revalidatePath, שנקרא בכל פעולת תוכן
+ * במערכת הניהול. כך העמוד מוגש מהמטמון — מהיר — ועדיין מתעדכן מיד.
  */
-export const dynamic = 'force-dynamic';
-
 export default async function HomePage() {
   const on = dna.sections;
   const c = await getSiteContent();
 
+  // Schema.org — כך מנוע החיפוש מזהה את פרטי העסק ומציג אותם בתוצאות.
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: c.site.name,
+    description: dna.seo.description,
+    url: dna.seo.siteUrl,
+    telephone: c.site.phone,
+    email: c.site.email,
+    address: { '@type': 'PostalAddress', streetAddress: c.site.address, addressCountry: 'IL' },
+    openingHours: c.site.hours,
+    inLanguage: 'he-IL',
+  };
+
   return (
     <>
-      <Header site={c.site} />
+      <script type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <main id="main">
         {on.hero && <Hero hero={c.hero} />}
         {on.trust && <TrustBar />}
@@ -34,7 +45,6 @@ export default async function HomePage() {
         {on.posts && <Posts posts={c.posts} />}
         {on.contact && <ContactCta site={c.site} contact={c.contact} />}
       </main>
-      <Footer site={c.site} />
     </>
   );
 }
