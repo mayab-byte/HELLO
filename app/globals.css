@@ -286,3 +286,151 @@ ul[class] { list-style: none; padding: 0; }
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* ====================== שאלות ותשובות ====================== */
+/* המבנה הוא <details>/<summary> טהור — נפתח בלי JavaScript, עובד
+   מהמקלדת כברירת מחדל, והטקסט נמצא ב-DOM גם כשהתשובה סגורה כדי
+   שסורק שאינו מריץ JS עדיין יקרא אותו. */
+.faq-list { display: grid; gap: var(--space-sm); list-style: none; margin: 0; padding: 0; }
+.faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.faq-item details { padding: var(--space-md) var(--space-lg); }
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-md);
+  font-family: var(--font-heading); font-weight: 700;
+  color: var(--text); cursor: pointer; list-style: none;
+}
+.faq-q::-webkit-details-marker { display: none; }
+.faq-q::after {
+  content: '+';
+  flex: none; font-size: 1.4em; line-height: 1; color: var(--brand-strong);
+}
+.faq-item details[open] .faq-q::after { content: '−'; }
+.faq-item details[open] .faq-q { margin-bottom: var(--space-sm); }
+.faq-a p { margin: 0; color: var(--text-muted); }
+.faq-q:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+/* ====================== תפריט נגישות ====================== */
+/* ⚠️ הצבעים כאן קבועים ואינם נגזרים מפלטת המותג. זו הנקודה: כשלקוח
+   מחליף פלטה, תפריט הנגישות חייב להישאר קריא בלי תלות בבחירה שלו.
+   הניגודיות של הצמד שלמטה היא 15.9:1. */
+.a11y-root { --a11y-ink: #10151f; --a11y-paper: #ffffff; --a11y-line: #c8cede; }
+
+.a11y-fab {
+  position: fixed; z-index: 300;
+  inset-inline-start: var(--gutter); bottom: var(--gutter);
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  background: var(--a11y-ink); color: var(--a11y-paper);
+  border: 2px solid var(--a11y-paper); border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-lg); cursor: pointer;
+}
+.a11y-fab-icon { font-size: 1.5rem; line-height: 1; }
+.a11y-fab:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+.a11y-panel {
+  position: fixed; z-index: 301;
+  inset-inline-start: var(--gutter); bottom: calc(var(--gutter) + 64px);
+  width: min(320px, calc(100vw - var(--gutter) * 2));
+  max-height: min(70vh, 560px); overflow-y: auto;
+  padding: var(--space-lg);
+  background: var(--a11y-paper); color: var(--a11y-ink);
+  border: 2px solid var(--a11y-ink); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.a11y-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-bottom: var(--space-md); }
+.a11y-title { font-size: var(--fs-h3); margin: 0; color: var(--a11y-ink); }
+.a11y-close, .a11y-reset, .a11y-toggle, .a11y-zoom button {
+  background: var(--a11y-paper); color: var(--a11y-ink);
+  border: 1px solid var(--a11y-line); border-radius: var(--radius-sm);
+  cursor: pointer; font: inherit;
+}
+.a11y-close { width: 36px; height: 36px; flex: none; }
+.a11y-group { margin-bottom: var(--space-md); }
+.a11y-group-title { font-weight: 700; font-size: var(--fs-small); margin: 0 0 var(--space-xs); }
+
+.a11y-zoom { display: flex; align-items: center; gap: var(--space-sm); }
+.a11y-zoom button { width: 44px; height: 44px; font-size: 1.25rem; }
+.a11y-zoom button[disabled] { opacity: 0.45; cursor: not-allowed; }
+.a11y-zoom output { flex: 1; text-align: center; font-weight: 700; }
+
+.a11y-list { display: grid; gap: var(--space-xs); list-style: none; margin: 0; padding: 0; }
+.a11y-toggle {
+  display: flex; align-items: center; gap: var(--space-sm);
+  width: 100%; min-height: 44px; padding: var(--space-xs) var(--space-sm);
+  text-align: start;
+}
+.a11y-toggle-box {
+  flex: none; width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border: 2px solid var(--a11y-ink); border-radius: 4px;
+  font-size: 0.9rem; font-weight: 700;
+}
+.a11y-toggle[aria-pressed='true'] { background: var(--a11y-ink); color: var(--a11y-paper); }
+.a11y-toggle[aria-pressed='true'] .a11y-toggle-box { border-color: var(--a11y-paper); }
+
+.a11y-foot { display: grid; gap: var(--space-sm); padding-top: var(--space-md); border-top: 1px solid var(--a11y-line); }
+.a11y-reset { min-height: 44px; font-weight: 700; }
+.a11y-statement { font-size: var(--fs-small); color: var(--a11y-ink); }
+
+.a11y-panel :focus-visible, .a11y-panel a:focus-visible {
+  outline: 3px solid var(--focus); outline-offset: 2px;
+}
+
+/* ---------- ההתאמות עצמן, כמחלקות על <html> ---------- */
+/* כולן CSS בלבד ואינן נוגעות ב-DOM של התוכן, ולכן אף התאמה לא יכולה
+   לשבור פריסה של אתר לקוח שאיננו מכירים מראש. */
+
+html.a11y-zoom { font-size: calc(100% * var(--a11y-zoom, 1)); }
+
+html.a11y-contrast body {
+  background: #ffffff;
+  --text: #000000; --text-muted: #1a1a1a; --bg: #ffffff; --bg-alt: #ffffff;
+  --surface: #ffffff; --border: #000000; --brand-strong: #00004d;
+}
+html.a11y-contrast img { filter: contrast(1.2); }
+
+html.a11y-dark body {
+  --bg: #0b0f16; --bg-alt: #121824; --surface: #161d2b;
+  --text: #f5f7fa; --text-muted: #c9d2e0; --border: #33405a;
+  --brand-soft: #16233b; --focus: #fde68a;
+  background: #0b0f16;
+}
+html.a11y-dark img:not([src$='.svg']) { filter: brightness(0.88); }
+
+html.a11y-links a { text-decoration: underline !important; text-underline-offset: 3px; font-weight: 700; }
+
+/* גופן ללא נטיות עיצוביות, לקוראים עם דיסלקציה או לקות ראייה. */
+html.a11y-readable body, html.a11y-readable :is(h1, h2, h3, h4, p, a, li, button, label, input, textarea) {
+  font-family: Arial, 'Segoe UI', system-ui, sans-serif !important;
+  letter-spacing: 0.01em;
+}
+
+html.a11y-spacing body { line-height: 1.9; letter-spacing: 0.05em; word-spacing: 0.16em; }
+html.a11y-spacing :is(p, li) { margin-block: 0.85em; }
+
+html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+html.a11y-cursor, html.a11y-cursor * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M6 2l30 18-13 3 7 14-6 3-7-14-11 8z' fill='%23000' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") 4 2, auto;
+}
+
+/* סרגל קריאה: פס אופקי שנצמד לסמן ומסייע למקד את השורה הנקראת. */
+html.a11y-guide body::after {
+  content: '';
+  position: fixed; z-index: 299; inset-inline: 0;
+  top: 50%; height: 2.2rem;
+  background: rgba(0, 0, 0, 0.08);
+  border-block: 2px solid rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+/* בהדפסה אין צורך בכפתור צף ולא בפאנל. */
+@media print { .a11y-root { display: none; } }

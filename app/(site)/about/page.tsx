@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
+import { dna } from '@/dna';
+import { pageMeta } from '@/lib/gso';
 import { getSiteContent } from '@/lib/site-content';
 import { requireSection } from '@/lib/page-guard';
 import { asset } from '@/lib/asset';
 import PageHeader from '@/components/site/PageHeader';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta(dna, {
   title: 'אודות',
   description: 'מי אנחנו, איך אנחנו עובדים ומה אפשר לצפות מאיתנו.',
-};
+  path: '/about',
+});
 
 export default async function AboutPage() {
   requireSection('about');

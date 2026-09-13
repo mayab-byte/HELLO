@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { dna } from '@/dna';
+import { pageMeta } from '@/lib/gso';
 import PageHeader from '@/components/site/PageHeader';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta(dna, {
   title: 'מדיניות פרטיות',
   description: 'איזה מידע נאסף באתר, לשם מה, ומה הזכויות שלכם לגביו.',
-};
+  path: '/privacy',
+});
 
 /**
  * מדיניות פרטיות לפי חוק הגנת הפרטיות, התשמ"א-1981, כולל תיקון 13
