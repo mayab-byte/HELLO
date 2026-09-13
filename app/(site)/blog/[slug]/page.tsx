@@ -6,7 +6,9 @@ import { dna } from '@/dna';
 import { requireSection } from '@/lib/page-guard';
 import { decodeParam } from '@/lib/slug';
 import { asset } from '@/lib/asset';
+import { articleNode, pageMeta } from '@/lib/gso';
 import PageHeader from '@/components/site/PageHeader';
+import JsonLd from '@/components/site/JsonLd';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -28,11 +30,12 @@ const load = (slug: string) =>
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await load((await params).slug);
   if (!post) return { title: 'המאמר לא נמצא' };
-  return {
+  return pageMeta(dna, {
     title: post.title,
-    description: post.excerpt ?? undefined,
-    openGraph: post.image ? { images: [asset(post.image.path)] } : undefined,
-  };
+    description: post.excerpt ?? dna.seo.description,
+    path: `/blog/${post.slug}`,
+    image: post.image?.path ?? null,
+  });
 }
 
 export default async function PostPage({ params }: Props) {
@@ -42,23 +45,20 @@ export default async function PostPage({ params }: Props) {
 
   const published = post.publishedAt ?? post.createdAt;
 
-  // Schema.org — עוזר למנוע החיפוש להציג את המאמר נכון בתוצאות.
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.excerpt ?? undefined,
-    datePublished: published.toISOString(),
-    dateModified: post.updatedAt.toISOString(),
-    inLanguage: 'he-IL',
-    publisher: { '@type': 'Organization', name: dna.brand.name },
-    ...(post.image ? { image: `${dna.seo.siteUrl}${post.image.path}` } : {}),
-  };
+  // Article עם מחבר, מפרסם ועוגן לעמוד עצמו. המחבר מגיע מ-dna.gso.author
+  // כי אין שדה מחבר במודל המאמר, ומחבר מזוהה נשקל מעל תוכן אנונימי.
+  const jsonLd = articleNode(dna, {
+    title: post.title,
+    excerpt: post.excerpt,
+    slug: post.slug,
+    published,
+    updated: post.updatedAt,
+    image: post.image ? { path: post.image.path, alt: post.image.alt } : null,
+  });
 
   return (
     <>
-      <script type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={jsonLd} />
       <PageHeader title={post.title} crumbs={[{ label: 'מאמרים', href: '/blog' }]} />
       <main id="main">
         <article className="section">

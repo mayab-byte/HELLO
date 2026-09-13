@@ -6,15 +6,16 @@
     "dev": "node scripts/dev.mjs",
     "dev:next": "next dev",
     "studio:server": "node scripts/studio-server.mjs",
-    "prebuild": "node scripts/check-dna.mjs && node scripts/bake.mjs",
+    "prebuild": "node scripts/check-dna.mjs && node scripts/check-gso.mjs && node scripts/bake.mjs",
     "build": "next build",
     "start": "next start",
     "check:dna": "node scripts/check-dna.mjs",
-    "bake": "node scripts/bake.mjs",
+    "check:gso": "node scripts/check-gso.mjs",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:seed": "node scripts/seed.mjs",
     "db:studio": "prisma studio",
+    "bake": "node scripts/bake.mjs",
     "postinstall": "prisma generate"
   },
   "dependencies": {

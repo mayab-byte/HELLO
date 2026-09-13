@@ -2,10 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
+import { dna } from '@/dna';
 import { requireSection } from '@/lib/page-guard';
 import { decodeParam } from '@/lib/slug';
 import { asset } from '@/lib/asset';
+import { pageMeta, serviceNode } from '@/lib/gso';
 import PageHeader from '@/components/site/PageHeader';
+import JsonLd from '@/components/site/JsonLd';
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -24,7 +27,12 @@ async function load(id: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = await load((await params).id);
   if (!service) return { title: 'השירות לא נמצא' };
-  return { title: service.title, description: service.summary };
+  return pageMeta(dna, {
+    title: service.title,
+    description: service.summary,
+    path: `/services/${service.id}`,
+    image: service.image?.path ?? null,
+  });
 }
 
 export default async function ServicePage({ params }: Props) {
@@ -34,6 +42,13 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <>
+      {/* Service כישות נפרדת, מקושרת לספק בגרף הראשי. */}
+      <JsonLd data={serviceNode(dna, {
+        id: service.id,
+        title: service.title,
+        summary: service.summary,
+        image: service.image ? { path: service.image.path } : null,
+      })} />
       <PageHeader
         title={service.title}
         lead={service.summary}

@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
+import { dna } from '@/dna';
+import { pageMeta } from '@/lib/gso';
 import { getSiteContent } from '@/lib/site-content';
 import { requireSection } from '@/lib/page-guard';
 import PageHeader from '@/components/site/PageHeader';
 import ContactCta from '@/components/site/ContactCta';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta(dna, {
   title: 'צור קשר',
   description: 'השאירו פרטים ונחזור אליכם בתוך יום עסקים אחד.',
-};
+  path: '/contact',
+});
 
 export default async function ContactPage() {
   requireSection('contact');

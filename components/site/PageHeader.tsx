@@ -1,10 +1,16 @@
 import Link from 'next/link';
 import { asset } from '@/lib/asset';
+import { dna } from '@/dna';
+import { breadcrumbNode } from '@/lib/gso';
+import JsonLd from './JsonLd';
 
 /**
  * ראש עמוד פנימי: פירורי לחם, כותרת ופסקת פתיחה.
- * הפירורים הם <nav> עם aria-label ו-aria-current, כדי שקורא מסך
- * ידע איפה המשתמש נמצא בהיררכיה.
+ *
+ * הפירורים הם <nav> עם aria-label ו-aria-current, כדי שקורא מסך ידע
+ * איפה המשתמש נמצא בהיררכיה — **וגם** BreadcrumbList ב-JSON-LD, נגזר
+ * מאותו מערך crumbs. כל עמוד פנימי בכל אתר עתידי שמשתמש בקומפוננטה
+ * הזו מקבל את ההיררכיה הסמנטית בחינם, בלי לדעת עליה.
  */
 export default function PageHeader({
   title, lead, eyebrow, crumbs = [],
@@ -16,6 +22,7 @@ export default function PageHeader({
 }) {
   return (
     <header className="page-header">
+      <JsonLd data={breadcrumbNode(dna, crumbs, title)} />
       <div className="container">
         <nav className="breadcrumbs" aria-label="מיקומך באתר">
           <ol>

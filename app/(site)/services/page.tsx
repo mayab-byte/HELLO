@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { dna } from '@/dna';
+import { pageMeta } from '@/lib/gso';
 import Link from 'next/link';
 import { db } from '@/lib/db';
 import { getSiteContent } from '@/lib/site-content';
@@ -6,10 +8,11 @@ import { requireSection } from '@/lib/page-guard';
 import { asset } from '@/lib/asset';
 import PageHeader from '@/components/site/PageHeader';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta(dna, {
   title: 'שירותים',
   description: 'מה אנחנו עושים, ואיך כל שירות נבנה סביב מטרה עסקית ברורה.',
-};
+  path: '/services',
+});
 
 export default async function ServicesPage() {
   requireSection('services');

@@ -2,7 +2,7 @@
 
 אתר-אב לשכפול: כל פרויקט לקוח מתחיל מ-`git clone` של המאגר הזה.
 
-Next.js 15 · React 19 · TypeScript · ייצוא סטטי · RTL · נגישות AA
+Next.js 15 · React 19 · TypeScript · RTL · נגישות AA · GSO
 
 ## הרצה
 
@@ -14,7 +14,8 @@ npm run dev      # http://localhost:3000
 | פקודה | מה היא עושה |
 |---|---|
 | `npm run dev` | Next dev + שרת ה-Design Studio |
-| `npm run build` | בדיקת פלטה, אפיית פתקי Studio, ובניית האפליקציה |
+| `npm run build` | בדיקת פלטה, בדיקת GSO ונגישות, אפייה, ובנייה |
+| `npm run check:gso` | אכיפת עקרונות GSO ונגישות |
 | `npm run db:seed` | מנהל ראשון + תוכן התחלה |
 | `npm start` | הרצת האפליקציה הבנויה |
 
@@ -29,6 +30,27 @@ createdb sitebase && cp .env.example .env   # למלא DATABASE_URL ו-SESSION_S
 npx prisma migrate deploy && npm run db:seed
 npm run dev                                  # http://localhost:3000/admin
 ```
+
+## GSO ונגישות — נאכפים בבנייה
+
+כל אתר שנגזר מהתשתית חייב לעמוד בעקרונות GSO (אופטימיזציה למנועי חיפוש
+גנרטיביים) ובחובות הנגישות. זו לא המלצה: `scripts/check-gso.mjs` רץ בכל
+בנייה, ואתר שלא עומד בהם **לא נבנה**.
+
+מה נגזר אוטומטית מ-`dna.gso`:
+
+- **JSON-LD מלא** — `LocalBusiness` + `WebSite` מקושרים, `BreadcrumbList`
+  בכל עמוד פנימי, `FAQPage`, `Article` עם מחבר, `Service`
+- **`/llms.txt`** — המפה שמודל שפה קורא: מי העסק, מה התשובות, איפה התוכן
+- **`robots.txt`** — רישום מפורש של עשרה סורקי AI, מותר או חסום בשדה אחד
+- **`canonical`** בכל עמוד, דרך `pageMeta()`
+- **תפריט נגישות** בכל אתר, שאינו ניתן לכיבוי
+
+הבדיקה סורקת את עץ הקבצים בפועל ולא רק את ה-DNA, ולכן עמוד שיתווסף בעתיד
+לאתר שאיננו מכירים ייתפס גם הוא. ראה [`docs/GSO.md`](docs/GSO.md).
+
+> במצב תבנית (`meta.client` עדיין `'אתר דוגמה'`) אלה אזהרות בלבד. ברגע
+> שמחליפים אותו בשם לקוח, הן הופכות לכשלי בנייה.
 
 ## Design Studio
 
@@ -48,11 +70,16 @@ npm run dev                                  # http://localhost:3000/admin
 
 | # | קובץ | מה מחליפים |
 |---|---|---|
-| 1 | **`dna.ts`** | שם, פרטי קשר, צבעים, גופנים, רכז נגישות, סקשנים פעילים |
+| 1 | **`dna.ts`** | שם, פרטי קשר, צבעים, גופנים, רכז נגישות, סקשנים, **בלוק `gso`** |
 | 2 | `content/site.ts` | נוסחי הטקסט של הסקשנים |
 | 3 | `public/images/` | התמונות |
 
-אחר כך `npm run check:dna`, `?edit` לסגירת הפינישים, ו-`npm run build`.
+אחר כך `npm run check:dna`, `npm run check:gso`, `?edit` לסגירת
+הפינישים, ו-`npm run build`.
+
+> ⚠️ החלק שדורש עבודה אמיתית ולא העתקה הוא `dna.gso.answers`. השאלות
+> צריכות להיות מה שגולש באמת שואל, והתשובות צריכות להכיל מספרים וטווחים.
+> זה מה שמנוע גנרטיבי בוחר לצטט, והבדיקה דורשת 120 תווים לתשובה.
 
 ## העלאה לאוויר
 
@@ -82,6 +109,7 @@ npm run dev                                  # http://localhost:3000/admin
 | `/about` | אודות | `/contact` | צור קשר |
 | `/services` · `/services/[id]` | שירותים | `/accessibility` | הצהרת נגישות |
 | `/gallery` | גלריה | `/privacy` | מדיניות פרטיות |
+| `/faq` | שאלות ותשובות | `/llms.txt` | המפה למודלים |
 | `/testimonials` | המלצות | `/terms` | תנאי שימוש |
 | `/admin` | מערכת הניהול | `/sitemap.xml` · `/robots.txt` | SEO |
 
@@ -93,7 +121,7 @@ npm run dev                                  # http://localhost:3000/admin
 ```
 dna.ts        ★ ה-DNA של האתר — הקובץ שעורכים בכל פרויקט
 prisma/       סכימת מסד הנתונים
-lib/          מסד, אימות, תוכן, מדיה
+lib/          מסד, אימות, תוכן, מדיה, gso.ts — מנוע הגזירה של הסימון
 app/admin/    מערכת הניהול
 app/          layout, עמוד הבית, טוקנים ו-CSS גלובלי
 components/   קומפוננטות האתר
@@ -109,4 +137,5 @@ docs/         אפיון ותיעוד
 - [`docs/CMS.md`](docs/CMS.md) — מערכת הניהול והאבטחה
 - [`docs/CLIENT-GUIDE.md`](docs/CLIENT-GUIDE.md) — מדריך ללקוח, בלי ז'רגון
 - [`docs/SPEC.md`](docs/SPEC.md) — אפיון התשתית המלא
+- [`docs/GSO.md`](docs/GSO.md) — GSO, נגישות, ומה נאכף בבנייה
 - [`docs/DESIGN-STUDIO.md`](docs/DESIGN-STUDIO.md) — העורך הוויזואלי

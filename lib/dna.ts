@@ -2,7 +2,7 @@
 
 export type SectionKey =
   | 'hero' | 'trust' | 'services' | 'about'
-  | 'gallery' | 'testimonials' | 'posts' | 'contact';
+  | 'gallery' | 'testimonials' | 'posts' | 'faq' | 'contact';
 
 export interface NavItem {
   label: string;
@@ -19,6 +19,92 @@ export interface DnaColors {
 }
 
 export interface DnaFont { family: string; weights: number[] }
+
+// ─────────────────────────── GSO ───────────────────────────
+
+/**
+ * GSO — אופטימיזציה למנועי חיפוש גנרטיביים.
+ *
+ * SEO קלאסי נלחם על מיקום בעמוד תוצאות. GSO נלחם על משהו אחר: שהמודל
+ * שעונה לגולש יצטט **אותנו**. מודל לא מדרג קישורים, הוא בונה תשובה,
+ * ולכן הוא צריך שלושה דברים שאתר רגיל לא טורח לתת לו:
+ *
+ *   1. ישות מוגדרת  — מי העסק, במונחים שמכונה מבינה (לא טקסט חופשי)
+ *   2. תשובות מפורשות — שאלה ותשובה, גלויות בעמוד וגם מסומנות
+ *   3. מפה קריאה     — llms.txt: מה יש באתר ולמי הוא מיועד
+ *
+ * הבלוק הזה מגדיר את שלושתם, וכל השאר נגזר ממנו אוטומטית.
+ */
+
+/** יום בשבוע בקיצור schema.org. */
+export type DayCode = 'Mo' | 'Tu' | 'We' | 'Th' | 'Fr' | 'Sa' | 'Su';
+
+/** שעות פתיחה בפורמט שמכונה מפרשת, להבדיל מ-identity.hours שהוא לבני אדם. */
+export interface OpeningHours {
+  days: DayCode[];
+  /** HH:MM בפורמט 24 שעות. */
+  opens: string;
+  closes: string;
+}
+
+/** שאלה ותשובה. מוצגת בעמוד **וגם** נגזרת ל-FAQPage — אותו מקור בדיוק. */
+export interface Answer {
+  q: string;
+  a: string;
+}
+
+export interface Gso {
+  entity: {
+    /** סוג הישות ב-schema.org. עסק עם כתובת פיזית = LocalBusiness. */
+    type: 'Organization' | 'LocalBusiness' | 'ProfessionalService';
+    /** שנת ההיווסדות. אות ותק שמודלים משתמשים בו. */
+    foundingYear: number | null;
+    /** טווח מחירים, ‎₪ עד ‎₪₪₪₪. */
+    priceRange: string | null;
+    /** אזורי שירות. */
+    areaServed: string[];
+    /** קואורדינטות. נדרשות ל-LocalBusiness. */
+    geo: { lat: number; lng: number } | null;
+    /**
+     * פרופילים מאמתים. ריק = נגזר אוטומטית מ-identity.social,
+     * תוך דילוג על עוגנים ריקים ('#').
+     */
+    sameAs: string[];
+  };
+
+  /**
+   * מי חתום על התוכן. מודלים שוקללים מחבר מזוהה מעל תוכן אנונימי,
+   * ובמודל הנתונים אין שדה מחבר למאמר — ולכן זו החתימה ברמת האתר.
+   */
+  author: {
+    name: string;
+    /** תפקיד או תחום מומחיות. */
+    title: string;
+    /** נתיב פנימי לעמוד שמבסס את הסמכות, למשל '/about'. */
+    url: string;
+  };
+
+  /** שעות פתיחה קריאות-מכונה. ריק = לא מפורסמות. */
+  hours: OpeningHours[];
+
+  /** התשובות שהאתר מפרסם. זה הלב של GSO. */
+  answers: Answer[];
+
+  llms: {
+    /** ייצור /llms.txt. */
+    enabled: boolean;
+    /** משפט אחד שמסביר למודל מה האתר הזה. */
+    summary: string;
+    /** נושאים שבהם האתר מתיימר להיות מקור. */
+    topics: string[];
+  };
+
+  /**
+   * מדיניות כלפי סורקי AI. 'allow' = מותר לסרוק ולצטט,
+   * 'block' = חסום במפורש ב-robots.txt.
+   */
+  crawlers: 'allow' | 'block';
+}
 
 export interface Dna {
   meta: { client: string; project: string; version: string; updated: string };
@@ -49,6 +135,7 @@ export interface Dna {
     titleTemplate: string; description: string; locale: string; ogImage: string;
     analytics: { ga4: string | null; metaPixel: string | null };
   };
+  gso: Gso;
   sections: Record<SectionKey, boolean>;
   nav: NavItem[];
   legalLinks: NavItem[];

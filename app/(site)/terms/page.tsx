@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { dna } from '@/dna';
+import { pageMeta } from '@/lib/gso';
 import PageHeader from '@/components/site/PageHeader';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta(dna, {
   title: 'תנאי שימוש',
   description: 'התנאים החלים על השימוש באתר.',
-};
+  path: '/terms',
+});
 
 /** ⚠️ תבנית מקצועית, לא ייעוץ משפטי. מומלץ אישור עו"ד לפני עלייה לאוויר. */
 export default function TermsPage() {

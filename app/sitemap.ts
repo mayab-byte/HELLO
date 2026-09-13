@@ -26,6 +26,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   maybe('gallery', '/gallery', 0.6);
   maybe('testimonials', '/testimonials', 0.5);
   maybe('posts', '/blog', 0.7);
+  // שאלות ותשובות מקבל עדיפות גבוהה: זה העמוד שמנועים גנרטיביים
+  // מצטטים ממנו בפועל.
+  maybe('faq', '/faq', 0.8);
   maybe('contact', '/contact', 0.9);
 
   if (dna.sections.posts) {

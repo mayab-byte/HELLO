@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { dna } from '@/dna';
+import { pageMeta } from '@/lib/gso';
 import PageHeader from '@/components/site/PageHeader';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta(dna, {
   title: 'הצהרת נגישות',
   description: 'הצהרת הנגישות של האתר, רמת ההתאמה ופרטי רכז הנגישות.',
-};
+  path: '/accessibility',
+});
 
 /**
  * הצהרת נגישות לפי תקנות שוויון זכויות לאנשים עם מוגבלות

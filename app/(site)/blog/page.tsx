@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { dna } from '@/dna';
+import { pageMeta } from '@/lib/gso';
 import Link from 'next/link';
 import { db } from '@/lib/db';
 import { requireSection } from '@/lib/page-guard';
@@ -6,10 +8,11 @@ import { asset } from '@/lib/asset';
 import PageHeader from '@/components/site/PageHeader';
 import { posts as seed } from '@/content/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta(dna, {
   title: 'מאמרים',
   description: 'תכנים מקצועיים שנכתבים על ידי הצוות.',
-};
+  path: '/blog',
+});
 
 const fmt = (d: Date) => new Intl.DateTimeFormat('he-IL', { dateStyle: 'long' }).format(d);
 
